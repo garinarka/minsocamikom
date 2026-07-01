@@ -7,3 +7,11 @@
   --amikom-black: #000000;
   --amikom-white: #ffffff;
 }
+.hero-section {
+  min-height: 70vh;
+  background: linear-gradient(
+    135deg,
+    var(--amikom-purple),
+    var(--amikom-tekhelet)
+  );
+}

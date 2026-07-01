@@ -10,10 +10,88 @@
 </head>
 
 <body>
-
-    <!-- konten index -->
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: var(--
+amikom-purple);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Minisoccer Amikom</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="fasilitas.html">Fasilitas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jadwal.html">Jadwal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tentang.html">Tentang</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="hero-section text-white text-center d-flex align-items-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Sewa Lapangan Minisoccer Amikom</h1>
+            <p class="lead">Rumput sintetis premium, pencahayaan malam, lokasi strategis kampus
+                Amikom.</p>
+            <a href="booking.html" class="btn btn-lg" style="background-color: var(--amikom
+jonquil);">Booking Sekarang</a>
+        </div>
+    </section>
+    <div id="fasilitasCarousel" class="carousel slide my-5" data-bs-ride="carousel">
+        <div class="carousel-inner container">
+            <div class="carousel-item active">
+                <img src="assets/img/lapangan1.jpg" class="d-block w-100 rounded" alt="Lapangan 1">
+            </div>
+            <div class="carousel-item">
+                <img src="assets/img/lapangan2.jpg" class="d-block w-100 rounded" alt="Lapangan 2">
+            </div>
+            <div class="carousel-item">
+                <img src="assets/img/lapangan3.jpg" class="d-block w-100 rounded" alt="Lapangan 3">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#fasilitasCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#fasilitasCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+    <section class="container mb-5">
+        <h2 class="text-center fw-bold mb-4" style="color: var(--amikom-purple);">Kenapa Pilih
+            Kami?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Rumput Premium</h5>
+                        <p class="card-text">Rumput sintetis standar kompetisi, nyaman untuk segala
+                            kondisi.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Lampu Terang</h5>
+                        <p class="card-text">Pencahayaan LED terang, cocok untuk main malam hari.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Parkir Luas</h5>
+                        <p class="card-text">Area parkir aman dan luas untuk motor maupun mobil.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="text-white text-center py-3" style="background-color: var(--amikom-purple);">
+        <p class="mb-0">&copy; 2026 Minisoccer Amikom. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
     <script src="script.js"></script>
 </body>
 

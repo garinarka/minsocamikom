@@ -7,6 +7,11 @@
   --amikom-black: #000000;
   --amikom-white: #ffffff;
 }
+body {
+  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+}
+
+/* Hero */
 .hero-section {
   min-height: 70vh;
   background: linear-gradient(
@@ -14,4 +19,76 @@
     var(--amikom-purple),
     var(--amikom-tekhelet)
   );
+  position: relative;
+  overflow: hidden;
+}
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255, 204, 0, 0.15), transparent 60%);
+  pointer-events: none;
+}
+.hero-section h1 {
+  letter-spacing: -0.5px;
+}
+.hero-section .lead {
+  opacity: 0.9;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--amikom-jonquil);
+  outline-offset: 2px;
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Navbar */
+.navbar .nav-link {
+  font-weight: 500;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.navbar .nav-link.active {
+  color: var(--amikom-jonquil) !important;
+}
+.navbar .nav-link:hover {
+  color: var(--amikom-jonquil) !important;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1) !important;
+}
+.card-title {
+  color: var(--amikom-purple);
+  font-weight: 600;
+}
+
+/* Headings spacing */
+h1, h2, h3 {
+  line-height: 1.25;
+}
+
+/* Footer */
+footer {
+  letter-spacing: 0.3px;
 }

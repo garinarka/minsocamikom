@@ -6,12 +6,363 @@
   --amikom-safety-orange: #ff7900;
   --amikom-black: #000000;
   --amikom-white: #ffffff;
+  --bg-soft: #f6f3ee;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow-float: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
+
+body {
+  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+  background-color: var(--bg-soft);
+}
+
+section,
+.py-5 {
+  scroll-margin-top: 90px;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  transition: box-shadow 0.2s ease;
+}
+.navbar.scrolled {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+}
+.navbar .nav-link {
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem !important;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: var(--amikom-jonquil) !important;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.navbar .btn-nav-cta {
+  background-color: var(--amikom-jonquil);
+  color: var(--amikom-purple);
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  border-radius: 999px;
+  font-weight: 600;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--amikom-jonquil);
+  outline-offset: 2px;
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn-outline-light-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== Pill badge ===== */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ===== Hero ===== */
 .hero-section {
-  min-height: 70vh;
+  min-height: 88vh;
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(
     135deg,
     var(--amikom-purple),
     var(--amikom-tekhelet)
   );
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+.hero-section.has-photo {
+  background-image:
+    linear-gradient(180deg, rgba(20, 0, 20, 0.55), rgba(20, 0, 20, 0.75)),
+    var(--hero-img);
+}
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 80% 20%,
+    rgba(255, 204, 0, 0.15),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+.hero-section h1 {
+  letter-spacing: -0.5px;
+}
+.hero-section .lead {
+  opacity: 0.92;
+}
+
+.hero-float-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-lg);
+  color: #fff;
+  padding: 1.25rem 1.5rem;
+}
+.hero-float-card .btn {
+  background: var(--amikom-jonquil);
+  color: var(--amikom-purple);
+}
+
+/* Quick search bar overlapping hero */
+.quickbar {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  padding: 1.25rem;
+  margin-top: -4.5rem;
+  position: relative;
+  z-index: 5;
+}
+.quickbar label {
+  font-size: 0.75rem;
+  color: #6b6b6b;
+  font-weight: 600;
+}
+.quickbar .form-select,
+.quickbar .form-control {
+  border: none;
+  background: #f6f3ee;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.quickbar .btn {
+  background-color: var(--amikom-purple);
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ===== Section headings ===== */
+.section-eyebrow {
+  color: var(--amikom-safety-orange);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.section-title {
+  color: var(--amikom-purple);
+  font-weight: 700;
+}
+
+/* ===== Cards ===== */
+.card {
+  border: none;
+  border-radius: var(--radius-md);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1) !important;
+}
+.card-title {
+  color: var(--amikom-purple);
+  font-weight: 600;
+}
+
+.icon-circle {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f2e6f2;
+  color: var(--amikom-purple);
+  font-size: 1.4rem;
+  margin: 0 auto 0.75rem;
+}
+.card-dark {
+  background: linear-gradient(
+    160deg,
+    var(--amikom-purple),
+    var(--amikom-tekhelet)
+  );
+  color: #fff;
+  border-radius: var(--radius-lg);
+}
+.card-dark .icon-circle {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--amikom-jonquil);
+}
+.card-dark p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== Media + floating stat ===== */
+.media-float-wrap {
+  position: relative;
+}
+.stat-float-card {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-float);
+  padding: 0.9rem 1.25rem;
+  min-width: 160px;
+}
+.stat-float-card .stat-number {
+  color: var(--amikom-purple);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.stat-float-card .stat-label {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+/* ===== Carousel ===== */
+.carousel-inner img {
+  border-radius: var(--radius-lg);
+}
+.carousel .carousel-control-prev,
+.carousel .carousel-control-next {
+  width: 6%;
+}
+
+/* ===== Steps (booking) ===== */
+.step-track {
+  position: relative;
+}
+.step-track .badge {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* ===== Table ===== */
+.table-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Accordion ===== */
+.accordion-button:not(.collapsed) {
+  background-color: #f2e6f2;
+  color: var(--amikom-purple);
+}
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--amikom-jonquil);
+}
+.accordion-item {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  border: 1px solid #eee !important;
+}
+
+/* ===== Bookmark button ===== */
+.btn-bookmark {
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+
+/* ===== Footer ===== */
+footer.site-footer {
+  background-color: var(--amikom-purple);
+  color: rgba(255, 255, 255, 0.85);
+  padding-top: 3rem;
+}
+footer.site-footer h5,
+footer.site-footer h6 {
+  color: #fff;
+}
+footer.site-footer a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+footer.site-footer a:hover {
+  color: var(--amikom-jonquil);
+}
+footer.site-footer .footer-social {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  margin-right: 0.5rem;
+}
+footer.site-footer hr {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== Headings spacing ===== */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+/* Scroll to top */
+#scrollTop {
+  box-shadow: var(--shadow-float);
+}
+
+@media (max-width: 767px) {
+  .quickbar {
+    margin-top: 1rem;
+  }
+  .stat-float-card {
+    position: static;
+    margin-top: -2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }

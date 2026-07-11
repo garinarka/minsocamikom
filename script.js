@@ -183,3 +183,37 @@ if (btnTop) {
   });
   btnTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
+
+// Blok 6: Slider generic (tombol panah kiri/kanan)
+function initSlider(root) {
+  const items = root.querySelectorAll(".slide-item");
+  const prevBtn = root.querySelector(".slide-prev");
+  const nextBtn = root.querySelector(".slide-next");
+  if (!items.length) return;
+
+  let current = 0;
+
+  function render() {
+    items.forEach((item, i) => item.classList.toggle("active", i === current));
+    if (prevBtn) prevBtn.classList.toggle("active", current !== 0);
+    if (nextBtn) nextBtn.classList.toggle("active", current !== items.length - 1);
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      current = current === 0 ? items.length - 1 : current - 1;
+      render();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      current = current === items.length - 1 ? 0 : current + 1;
+      render();
+    });
+  }
+
+  render();
+}
+
+document.querySelectorAll("[data-slider]").forEach(initSlider);

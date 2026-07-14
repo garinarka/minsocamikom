@@ -1,6 +1,3 @@
-// weather.js - Widget Prakiraan Cuaca (booking.html)
-// Diadaptasi dari weather.html, memakai elemen di dalam .weather-widget
-
 (function () {
   const API_KEY = "7771a19973c2991770825a8430b0854e";
 
@@ -8,25 +5,6 @@
   const citySubtitleEl = document.getElementById("citySubtitle");
   const forecastContainer = document.getElementById("weatherForecastContainer");
   const loadingSpinner = document.getElementById("loadingSpinner");
-  const searchBtn = document.getElementById("searchBtn");
-  const cityInput = document.getElementById("cityInput");
-
-  // widget hanya berjalan jika elemen tersedia di halaman (booking.html)
-  if (!cityNameEl || !forecastContainer || !searchBtn || !cityInput) return;
-
-  searchBtn.addEventListener("click", () => {
-    const city = cityInput.value.trim();
-    if (city) {
-      getWeatherData(city);
-    }
-  });
-
-  cityInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      searchBtn.click();
-    }
-  });
 
   // async fetch data cuaca
   async function getWeatherData(city) {
@@ -48,10 +26,8 @@
       cityNameEl.textContent = `${data.city.name}`;
       citySubtitleEl.textContent = `${data.city.country} · ${data.city.coord.lat}, ${data.city.coord.lon}`;
 
-      const dailyForecasts = data.list.filter((item) =>
-        item.dt_txt.includes("12:00:00"),
-      );
-      renderForecast(dailyForecasts);
+      const forecastPerSesi = getTodayForecastBySesi(data.list);
+      renderForecast(forecastPerSesi);
     } catch (error) {
       cityNameEl.textContent = "Gagal memuat...";
       citySubtitleEl.textContent = error.message;
@@ -60,35 +36,72 @@
     }
   }
 
-  // render kartu prakiraan cuaca
+  // definisi jam sesi, disamakan dengan aturan sesi booking (pagi/sore/malam)
+  const sesiConfig = [
+    { key: "pagi", label: "Pagi", jamMulai: 6, jamSelesai: 10 },
+    { key: "sore", label: "Sore", jamMulai: 15, jamSelesai: 18 },
+    { key: "malam", label: "Malam", jamMulai: 18, jamSelesai: 23 },
+  ];
+
+  function pad2(n) {
+    return n < 10 ? "0" + n : "" + n;
+  }
+
+  // ambil data forecast HARI INI saja, dikelompokkan per sesi (pagi/sore/malam)
+  function getTodayForecastBySesi(list) {
+    const sekarang = new Date();
+
+    return sesiConfig.map((sesi) => {
+      const kandidat = list.filter((item) => {
+        const waktu = new Date(item.dt * 1000);
+        return (
+          waktu.toDateString() === sekarang.toDateString() &&
+          waktu.getHours() >= sesi.jamMulai &&
+          waktu.getHours() < sesi.jamSelesai
+        );
+      });
+
+      // ambil data di titik tengah rentang sesi biar paling representatif
+      const dataTerpilih = kandidat[Math.floor(kandidat.length / 2)] || null;
+
+      return { sesi, data: dataTerpilih };
+    });
+  }
+
+  // render kartu prakiraan cuaca per sesi (hari ini saja)
   function renderForecast(forecasts) {
     forecastContainer.innerHTML = "";
 
-    forecasts.forEach((day) => {
-      const dateObj = new Date(day.dt * 1000);
-      const hariFormat = dateObj.toLocaleDateString("id-ID", {
-        weekday: "short",
-      });
-      const tanggalFormat = dateObj.toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "short",
-      });
+    forecasts.forEach(({ sesi, data }) => {
+      const rentangJam = `${pad2(sesi.jamMulai)}.00 - ${pad2(sesi.jamSelesai)}.00`;
 
-      const temp = Math.round(day.main.temp);
-      const desc = day.weather[0].description;
-      const iconCode = day.weather[0].icon;
+      if (!data) {
+        const cardHtml = `
+          <div class="weather-mini-card">
+            <div class="weather-mini-day">${sesi.label}</div>
+            <div class="weather-mini-date">${rentangJam}</div>
+            <div class="weather-mini-desc" style="min-height:auto; margin-top:14px;">Data belum tersedia</div>
+          </div>
+        `;
+        forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
+        return;
+      }
+
+      const temp = Math.round(data.main.temp);
+      const desc = data.weather[0].description;
+      const iconCode = data.weather[0].icon;
       const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
       const cardHtml = `
         <div class="weather-mini-card">
-          <div class="weather-mini-day">${hariFormat}</div>
-          <div class="weather-mini-date">${tanggalFormat}</div>
+          <div class="weather-mini-day">${sesi.label}</div>
+          <div class="weather-mini-date">${rentangJam}</div>
           <img class="weather-mini-icon" src="${iconUrl}" alt="${desc}">
           <div class="weather-mini-temp">${temp}&deg;</div>
           <div class="weather-mini-desc">${desc}</div>
           <div class="weather-mini-meta">
-            <span><i class="bi bi-droplet-fill"></i> ${day.main.humidity}%</span>
-            <span><i class="bi bi-wind"></i> ${Math.round(day.wind.speed * 3.6)} km/j</span>
+            <span><i class="bi bi-droplet-fill"></i> ${data.main.humidity}%</span>
+            <span><i class="bi bi-wind"></i> ${Math.round(data.wind.speed * 3.6)} km/j</span>
           </div>
         </div>
       `;

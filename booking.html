@@ -23,10 +23,9 @@
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="fasilitas.html">Fasilitas</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="booking.html">Booking & Jadwal</a></li>
                     <li class="nav-item"><a class="nav-link" href="tentang.html">Tentang</a></li>
                 </ul>
-                <a href="#formBooking" class="btn-navbar-cta">
+                <a href="#formBooking" class="btn-navbar-cta active">
                     Booking Sekarang
                     <span class="icon-circle-sm"><i class="bi bi-arrow-up-right"></i></span>
                 </a>
@@ -183,7 +182,18 @@
                                 <label for="tanggal">Tanggal Main</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="time" class="form-control" id="jam" required>
+                                <select class="form-select" id="sesi" required>
+                                    <option value="" disabled selected>Pilih sesi</option>
+                                    <option value="pagi">Pagi (06.00 - 10.00)</option>
+                                    <option value="sore">Sore (15.00 - 18.00)</option>
+                                    <option value="malam">Malam (18.00 - 23.00)</option>
+                                </select>
+                                <label for="sesi">Sesi</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="jam" required disabled>
+                                    <option value="" disabled selected>Pilih sesi terlebih dahulu</option>
+                                </select>
                                 <label for="jam">Jam Mulai</label>
                             </div>
                             <div class="form-floating mb-3">
@@ -211,18 +221,10 @@
                                 <i class="bi bi-cloud-sun-fill" style="color:var(--amikom-orange);"></i> Prakiraan
                                 Cuaca
                             </h2>
-                            <span class="badge rounded-pill weather-badge">5 Hari</span>
+                            <span class="badge rounded-pill weather-badge">Hari Ini</span>
                         </div>
-                        <p class="text-muted mb-3" style="font-size:0.85rem;">Cek cuaca sebelum booking sesi
-                            outdoor kamu.</p>
-
-                        <div class="weather-search mb-3">
-                            <input type="text" id="cityInput" class="form-control" placeholder="Masukkan Nama Kota..."
-                                value="Sleman">
-                            <button type="button" id="searchBtn" class="btn-explore">
-                                Cari
-                            </button>
-                        </div>
+                        <p class="text-muted mb-3" style="font-size:0.85rem;">Cek cuaca hari ini per sesi sebelum
+                            booking sesi outdoor kamu.</p>
 
                         <div class="text-center mb-3">
                             <h6 id="cityName" class="weather-city-name mb-0">Menyiapkan Data...</h6>

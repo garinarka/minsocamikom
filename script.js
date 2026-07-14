@@ -13,6 +13,7 @@ const hargaTabel = {
   malam: { weekday: 120000, weekend: 150000 },
 };
 
+const sesiInput = document.getElementById("sesi");
 const jamInput = document.getElementById("jam");
 const tanggalInput = document.getElementById("tanggal");
 const durasiInput = document.getElementById("durasi");
@@ -31,14 +32,35 @@ function isWeekend(tanggalStr) {
   return day === 0 || day === 6;
 }
 
+// isi ulang opsi dropdown "Jam Mulai" sesuai sesi yang dipilih
+function populateJamOptions(sesi) {
+  if (!jamInput) return;
+
+  const jamList = sesi ? jamRangeSesi(sesi) : [];
+
+  if (!jamList.length) {
+    jamInput.disabled = true;
+    jamInput.innerHTML = `<option value="" disabled selected>Pilih sesi terlebih dahulu</option>`;
+    return;
+  }
+
+  jamInput.disabled = false;
+  let opsiHtml = `<option value="" disabled selected>Pilih jam mulai</option>`;
+  jamList.forEach((h) => {
+    const jamStr = `${pad(h)}:00`;
+    opsiHtml += `<option value="${jamStr}">${jamStr}</option>`;
+  });
+  jamInput.innerHTML = opsiHtml;
+}
+
 function hitungTotal() {
   if (!totalHargaEl) return;
 
   const durasi = parseInt(durasiInput.value) || 0;
-  const sesi = jamInput.value ? getSesi(jamInput.value) : null;
+  const sesi = sesiInput && sesiInput.value ? sesiInput.value : null;
   const weekend = tanggalInput.value ? isWeekend(tanggalInput.value) : false;
 
-  if (!sesi || !durasi) {
+  if (!sesi || !durasi || !jamInput.value) {
     totalHargaEl.textContent = "Total Harga: Rp0";
     return;
   }
@@ -51,6 +73,13 @@ function hitungTotal() {
   totalHargaEl.textContent = `Total Harga: Rp${total.toLocaleString("id-ID")} (${sesi}, ${weekend ? "weekend" : "weekday"})`;
 }
 
+if (sesiInput) {
+  populateJamOptions("");
+  sesiInput.addEventListener("change", () => {
+    populateJamOptions(sesiInput.value);
+    hitungTotal();
+  });
+}
 if (durasiInput) durasiInput.addEventListener("change", hitungTotal);
 if (jamInput) jamInput.addEventListener("change", hitungTotal);
 if (tanggalInput) tanggalInput.addEventListener("change", hitungTotal);
@@ -95,6 +124,7 @@ if (btnRingkasan) {
       <p><b>Nama:</b> ${document.getElementById("nama").value}</p>
       <p><b>No. HP:</b> ${document.getElementById("hp").value}</p>
       <p><b>Tanggal:</b> ${tanggalInput.value}</p>
+      <p><b>Sesi:</b> ${sesiInput.value.charAt(0).toUpperCase() + sesiInput.value.slice(1)}</p>
       <p><b>Jam:</b> ${jamInput.value}</p>
       <p><b>Durasi:</b> ${durasiInput.value} jam</p>
       <p>${totalHargaEl.textContent}</p>
@@ -117,6 +147,7 @@ if (btnKonfirmasi) {
     bookingForm.reset();
     bookingForm.classList.remove("was-validated");
     totalHargaEl.textContent = "Total Harga: Rp0";
+    populateJamOptions("");
   });
 }
 

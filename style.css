@@ -72,6 +72,17 @@ a {
   gap: 8px;
 }
 
+.btn-navbar-cta.active {
+  background: var(--amikom-jonquil);
+  color: #1a1a1a;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+.btn-navbar-cta.active .icon-circle-sm {
+  background: var(--amikom-purple);
+  color: #fff;
+}
+
 .icon-circle-sm {
   background: var(--amikom-purple);
   color: #fff;
@@ -222,6 +233,10 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
 }
 
 .btn-explore:hover,
@@ -230,6 +245,9 @@ a {
 .btn-see-more:hover {
   background: var(--amikom-tekhelet);
   color: #fff;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .arrow-icon {

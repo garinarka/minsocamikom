@@ -24,7 +24,7 @@
       const data = await response.json();
 
       cityNameEl.textContent = `${data.city.name}`;
-      citySubtitleEl.textContent = `${data.city.country} · ${data.city.coord.lat}, ${data.city.coord.lon}`;
+      citySubtitleEl.textContent = `Negara: ${data.city.country} / Koordinat: ${data.city.coord.lat}, ${data.city.coord.lon}`;
 
       const forecastPerSesi = getTodayForecastBySesi(data.list);
       renderForecast(forecastPerSesi);

@@ -7,7 +7,8 @@
     <title>Booking Lapangan Minisoccer Amikom</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
@@ -22,8 +23,6 @@
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="fasilitas.html">Fasilitas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="jadwal.html">Jadwal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
                     <li class="nav-item"><a class="nav-link" href="tentang.html">Tentang</a></li>
                 </ul>
                 <a href="booking.html" class="btn-navbar-cta">
@@ -34,15 +33,18 @@
         </div>
     </nav>
 
-    <!-- Hero -->
+    <!-- hero -->
     <section class="hero-section">
         <div class="container hero-content">
             <div class="row align-items-center">
-                <div class="col-lg-7">
+                <div class="col-md-7">
                     <div class="trusted-badge">
                         <i class="bi bi-geo-alt-fill"></i> Terpercaya di Kampus Amikom Yogyakarta
                     </div>
-                    <h1 class="hero-title">Sewa Lapangan<br>Minisoccer Amikom</h1>
+                    <h1 class="hero-title hero-title-split">
+                        <span class="text-outline">Sewa Lapangan</span><br>
+                        <span class="text-solid">Minisoccer Amikom</span>
+                    </h1>
                     <p class="hero-subtitle">Rumput sintetis premium, pencahayaan LED terang, dan lokasi
                         strategis di lingkungan kampus. Booking cukup 2 menit tanpa perlu daftar akun.</p>
                     <div class="hero-cta-group">
@@ -50,16 +52,15 @@
                             Booking Sekarang
                             <span class="arrow-icon"><i class="bi bi-arrow-up-right"></i></span>
                         </a>
-                        <a href="jadwal.html" class="btn btn-outline-light rounded-pill px-4">Cek Harga & Jadwal</a>
                     </div>
                 </div>
-                <div class="col-lg-5 d-flex justify-content-lg-end justify-content-center mt-5 mt-lg-0">
-                    <div class="fields-card" style="max-width:320px;">
-                        <div class="fields-badge"><i class="bi bi-check-circle-fill"></i> Buka Setiap Hari</div>
+                <div class="col-md-5 d-flex justify-content-md-end justify-content-center mt-5 mt-md-0">
+                    <div class="fields-card">
+                        <div class="fields-badge"><i class="bi bi-check-circle-fill"></i> 3 Sesi Waktu Bermain</div>
                         <h5>Booking Instan, Tanpa Ribet, Tanpa Akun</h5>
-                        <p>Isi data, pilih jam, langsung dapat konfirmasi.</p>
+                        <p>Booking instan hanya di platform resmi kami, tanpa perlu login atau registrasi akun.</p>
                         <a href="booking.html" class="btn-explore">
-                            Mulai Booking
+                            Cek Harga & Jadwal
                             <span class="arrow-icon"><i class="bi bi-arrow-up-right"></i></span>
                         </a>
                     </div>
@@ -68,19 +69,22 @@
         </div>
     </section>
 
-    <!-- Quick check jadwal -->
+    <!-- quickbar untuk cek jadwal -->
     <div class="search-bar-container">
         <div class="container">
             <div class="search-bar">
-                <h6><i class="bi bi-lightning-charge-fill" style="color:var(--amikom-jonquil);"></i> Cek Ketersediaan Cepat</h6>
+                <h6><i class="bi bi-lightning-charge-fill" style="color:var(--amikom-jonquil);"></i> Cek Ketersediaan
+                    Cepat</h6>
                 <div class="row g-2 align-items-center">
                     <div class="col-lg-3 col-md-6">
-                        <div class="search-field"><i class="bi bi-geo-alt-fill"></i><span>Kampus Amikom Yogyakarta</span></div>
+                        <div class="search-field"><i class="bi bi-geo-alt-fill"></i><span>Kampus Amikom
+                                Yogyakarta</span></div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="search-field"><i class="bi bi-calendar3"></i><input type="date" id="quickTanggal"></div>
+                        <div class="search-field"><i class="bi bi-calendar3"></i><input type="date" id="quickTanggal">
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-4">
+                    <div class="col-lg-3 col-md-6">
                         <div class="search-field">
                             <i class="bi bi-clock"></i>
                             <select id="quickSesi">
@@ -90,77 +94,74 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-4">
-                        <div class="search-field">
-                            <i class="bi bi-hourglass-split"></i>
-                            <select id="quickDurasi">
-                                <option value="1">1 Jam</option>
-                                <option value="2">2 Jam</option>
-                                <option value="3">3 Jam</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-4">
-                        <a href="booking.html" class="btn-search-submit w-100">
-                            Booking <i class="bi bi-arrow-up-right"></i>
-                        </a>
+                    <div class="col-lg-3 col-md-6">
+                        <button id="btnCekKetersediaan" class="btn-search-submit w-100">
+                            Cek Ketersediaan <i class="bi bi-arrow-up-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Pilihan Lapangan -->
+    <!-- galeri lapangan -->
     <section class="section-cream section-padding">
         <div class="container">
             <div class="row align-items-center" data-slider>
                 <div class="col-lg-5 mb-4 mb-lg-0">
-                    <div class="section-label"><i class="bi bi-grid-3x3-gap-fill"></i> Fasilitas Kami</div>
+                    <div class="section-label"><i class="bi bi-images"></i> Galeri Lapangan</div>
                     <h2 class="section-title">Kualitas Lapangan<br>Terbaik di Kampus</h2>
                     <p class="section-subtitle">Kami rawat setiap sudut lapangan agar nyaman dipakai
                         pagi, sore, maupun malam hari.</p>
-                    <div class="nav-arrows">
-                        <button class="nav-arrow slide-prev"><i class="bi bi-arrow-left"></i></button>
-                        <button class="nav-arrow slide-next"><i class="bi bi-arrow-right"></i></button>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="nav-arrows">
+                            <button class="nav-arrow slide-prev"><i class="bi bi-arrow-left"></i></button>
+                            <button class="nav-arrow slide-next"><i class="bi bi-arrow-right"></i></button>
+                        </div>
+                        <span class="slide-counter"><span class="slide-counter-current">01</span> / 03</span>
                     </div>
                 </div>
                 <div class="col-lg-7">
-                    <div class="slider-track">
-                        <div class="slide-item active">
-                            <div class="field-card">
-                                <img src="assets/img/rumput.jpg" class="field-card-img" alt="Rumput Sintetis" onerror="this.src='https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=400&q=80'">
-                                <div>
-                                    <h5>Rumput Sintetis Premium</h5>
-                                    <p class="location-text">Standar kompetisi, empuk dan aman untuk kaki pemain.</p>
-                                    <div class="rating">4.8</div>
-                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-                                    <div class="reviews">120+ ulasan mahasiswa</div>
+                    <div class="gallery-carousel">
+                        <div class="gallery-main">
+                            <div class="slide-item active">
+                                <img src="assets/img/rumput.jpg" class="gallery-img" alt="Lapangan Utama"
+                                    onerror="this.src='https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=900&q=80'">
+                                <div class="gallery-caption">
+                                    <h5>Lapangan Utama</h5>
+                                    <p>Rumput sintetis standar kompetisi, empuk dan aman untuk kaki pemain.</p>
+                                </div>
+                            </div>
+                            <div class="slide-item">
+                                <img src="assets/img/lampu.jpg" class="gallery-img" alt="Suasana Malam Hari"
+                                    onerror="this.src='https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=900&q=80'">
+                                <div class="gallery-caption">
+                                    <h5>Suasana Malam Hari</h5>
+                                    <p>Pencahayaan LED terang merata, mendukung permainan hingga malam.</p>
+                                </div>
+                            </div>
+                            <div class="slide-item">
+                                <img src="assets/img/parkir.jpg" class="gallery-img" alt="Area Sekitar Lapangan"
+                                    onerror="this.src='https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=900&q=80'">
+                                <div class="gallery-caption">
+                                    <h5>Area Sekitar Lapangan</h5>
+                                    <p>Parkir luas dan akses mudah, aman untuk motor maupun mobil.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="slide-item">
-                            <div class="field-card">
-                                <img src="assets/img/lampu.jpg" class="field-card-img" alt="Lampu LED" onerror="this.src='https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400&q=80'">
-                                <div>
-                                    <h5>Pencahayaan LED Terang</h5>
-                                    <p class="location-text">Terang merata, mendukung permainan hingga malam hari.</p>
-                                    <div class="rating">4.7</div>
-                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
-                                    <div class="reviews">95+ ulasan mahasiswa</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide-item">
-                            <div class="field-card">
-                                <img src="assets/img/parkir.jpg" class="field-card-img" alt="Area Parkir" onerror="this.src='https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=400&q=80'">
-                                <div>
-                                    <h5>Area Parkir Luas</h5>
-                                    <p class="location-text">Aman untuk motor maupun mobil, dekat pintu masuk lapangan.</p>
-                                    <div class="rating">4.6</div>
-                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div>
-                                    <div class="reviews">80+ ulasan mahasiswa</div>
-                                </div>
-                            </div>
+                        <div class="gallery-thumbs">
+                            <button class="gallery-thumb active" data-index="0">
+                                <img src="assets/img/rumput.jpg" alt="Thumbnail Lapangan Utama"
+                                    onerror="this.src='https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=200&q=80'">
+                            </button>
+                            <button class="gallery-thumb" data-index="1">
+                                <img src="assets/img/lampu.jpg" alt="Thumbnail Malam Hari"
+                                    onerror="this.src='https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=200&q=80'">
+                            </button>
+                            <button class="gallery-thumb" data-index="2">
+                                <img src="assets/img/parkir.jpg" alt="Thumbnail Area Parkir"
+                                    onerror="this.src='https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=200&q=80'">
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -168,7 +169,7 @@
         </div>
     </section>
 
-    <!-- Kenapa Pilih Kami -->
+    <!-- kenapa pilih kami -->
     <section class="section-white section-padding">
         <div class="container">
             <div class="row mb-5">
@@ -178,7 +179,7 @@
                 <div class="col-lg-6 d-flex flex-column align-items-lg-end">
                     <p class="section-subtitle text-lg-end mb-3">Booking instan tanpa risiko, jadwal langsung
                         terpantau di halaman Jadwal & Booking.</p>
-                    <a href="jadwal.html" class="btn-learn-more">
+                    <a href="booking.html" class="btn-learn-more">
                         Lihat Jadwal <span class="arrow-icon"><i class="bi bi-arrow-up-right"></i></span>
                     </a>
                 </div>
@@ -186,7 +187,8 @@
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="feature-card">
-                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80" alt="Rumput Premium">
+                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80"
+                            alt="Rumput Premium">
                         <div class="feature-card-overlay">
                             <span class="badge-pill-dark"><i class="bi bi-grid-3x3-gap-fill"></i> Fasilitas</span>
                             <h5>Rumput Standar<br>Kompetisi</h5>
@@ -195,7 +197,8 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="feature-card">
-                        <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=600&q=80" alt="Booking Tanpa Bentrok">
+                        <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=600&q=80"
+                            alt="Booking Tanpa Bentrok">
                         <div class="feature-card-overlay">
                             <span class="badge-pill-dark"><i class="bi bi-shield-check"></i> Tanpa Bentrok</span>
                             <h5>Jadwal Tersinkron<br>Real-Time</h5>
@@ -208,14 +211,15 @@
                         <div class="feature-icon-circle"><i class="bi bi-clock-history"></i></div>
                         <h5>Konfirmasi Booking<br>Instan</h5>
                         <p>Isi form, lihat ringkasan, konfirmasi — kami hubungi via WhatsApp untuk verifikasi.</p>
-                        <a href="booking.html" class="learn-more-link">Booking Sekarang <i class="bi bi-arrow-up-right"></i></a>
+                        <a href="booking.html" class="learn-more-link">Booking Sekarang <i
+                                class="bi bi-arrow-up-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Core Service -->
+    <!-- layanan utama -->
     <section class="core-service-section">
         <div class="container">
             <div class="row align-items-center">
@@ -237,9 +241,11 @@
                             <div class="icon-badge">+2</div>
                         </div>
                         <div class="d-flex gap-3 align-items-center flex-wrap">
-                            <img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=200&q=80" alt="Fasilitas" style="width:100px;height:80px;border-radius:12px;object-fit:cover;">
+                            <img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=200&q=80"
+                                alt="Fasilitas" style="width:100px;height:80px;border-radius:12px;object-fit:cover;">
                             <div>
-                                <p class="mb-2" style="font-size:.8rem;color:var(--text-muted);max-width:320px;">Cek seluruh fasilitas kami secara lengkap, mulai dari rumput hingga area parkir.</p>
+                                <p class="mb-2" style="font-size:.8rem;color:var(--text-muted);max-width:320px;">Cek
+                                    seluruh fasilitas kami secara lengkap, mulai dari rumput hingga area parkir.</p>
                                 <a href="fasilitas.html" class="btn-see-more">
                                     Lihat Fasilitas <span class="arrow-icon"><i class="bi bi-arrow-up-right"></i></span>
                                 </a>
@@ -251,7 +257,7 @@
         </div>
     </section>
 
-    <!-- Testimoni -->
+    <!-- testimoni -->
     <section class="section-cream section-padding">
         <div class="container">
             <div class="row mb-5">
@@ -266,7 +272,8 @@
             <div class="row" data-slider>
                 <div class="col-lg-5 mb-4 mb-lg-0">
                     <div class="testimonial-card">
-                        <img src="https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=600&q=80" class="testimonial-img" alt="Lapangan Amikom">
+                        <img src="https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=600&q=80"
+                            class="testimonial-img" alt="Lapangan Amikom">
                     </div>
                 </div>
                 <div class="col-lg-7">
@@ -277,12 +284,17 @@
                                 rutin anak kelas."</p>
                             <div class="d-flex align-items-center justify-content-between flex-wrap">
                                 <div class="testimonial-author">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Rizky">
-                                    <div><h6>Rizky</h6><span><i class="bi bi-geo-alt-fill"></i> Mahasiswa Amikom</span></div>
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"
+                                        alt="Rizky">
+                                    <div>
+                                        <h6>Rizky</h6><span><i class="bi bi-geo-alt-fill"></i> Mahasiswa Amikom</span>
+                                    </div>
                                 </div>
                                 <div class="testimonial-rating">
                                     <div class="score">5.0</div>
-                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-fill"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -291,12 +303,17 @@
                                 Parkirnya juga luas jadi nggak was-was taruh motor."</p>
                             <div class="d-flex align-items-center justify-content-between flex-wrap">
                                 <div class="testimonial-author">
-                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Dewi">
-                                    <div><h6>Dewi</h6><span><i class="bi bi-geo-alt-fill"></i> Mahasiswa Amikom</span></div>
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80"
+                                        alt="Dewi">
+                                    <div>
+                                        <h6>Dewi</h6><span><i class="bi bi-geo-alt-fill"></i> Mahasiswa Amikom</span>
+                                    </div>
                                 </div>
                                 <div class="testimonial-rating">
                                     <div class="score">4.8</div>
-                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                            class="bi bi-star-half"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -312,11 +329,12 @@
         </div>
     </section>
 
-    <!-- CTA -->
+    <!-- cta -->
     <section class="section-white section-padding">
         <div class="container">
             <div class="cta-section">
-                <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=1200&q=80" class="cta-section-bg" alt="Ajak Main">
+                <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=1200&q=80"
+                    class="cta-section-bg" alt="Ajak Main">
                 <div class="cta-content">
                     <h3>Jangan Sampai Kehabisan<br>Slot, Booking Sekarang</h3>
                     <div class="cta-mini-card">
@@ -331,7 +349,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
@@ -349,7 +367,7 @@
                     <h6>Navigasi</h6>
                     <ul class="footer-links">
                         <li><a href="fasilitas.html">Fasilitas</a></li>
-                        <li><a href="jadwal.html">Jadwal & Harga</a></li>
+                        <li><a href="booking.html">Jadwal & Harga</a></li>
                         <li><a href="booking.html">Booking</a></li>
                     </ul>
                 </div>
@@ -374,7 +392,33 @@
         </div>
     </footer>
 
-    <button id="scrollTop" class="btn btn-warning rounded-circle position-fixed d-none" style="bottom:20px;right:20px;width:45px;height:45px;z-index:999;"><i class="bi bi-arrow-up"></i></button>
+    <!-- loading overlay saat cek ketersediaan -->
+    <div id="loadingCekJadwal" class="glass-loading-overlay d-none">
+        <div class="glass-loading">
+            <span class="badge spinner-border spinner-border-sm"></span>
+            <span>Mengecek ketersediaan jadwal...</span>
+        </div>
+    </div>
+
+    <!-- modal hasil ketersediaan -->
+    <div class="modal fade" id="modalKetersediaan" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:var(--amikom-purple);color:#fff;">
+                    <h5 class="modal-title">Ketersediaan Jadwal</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="isiKetersediaan"></div>
+                <div class="modal-footer">
+                    <a href="booking.html" class="btn-book-now">Booking Sekarang</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="scrollTop" class="btn btn-warning rounded-circle position-fixed d-none"
+        style="bottom:20px;right:20px;width:45px;height:45px;z-index:999;"><i class="bi bi-arrow-up"></i></button>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>

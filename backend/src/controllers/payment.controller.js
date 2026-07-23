@@ -2,6 +2,8 @@ const xenditClient = require("../config/xendit");
 const transactionModel = require("../models/transaction.model");
 const bookingModel = require("../models/booking.model");
 const scheduleModel = require("../models/schedule.model");
+const userModel = require("../models/user.model");
+const emailService = require("../services/email.service");
 const { generateExternalId } = require("../utils/externalId");
 const pool = require("../config/db");
 
@@ -92,6 +94,9 @@ async function webhook(req, res, next) {
     if (status === "PAID") {
       await transactionModel.updateStatus(transaction.id, "paid", paid_at || new Date());
       await bookingModel.updateStatus(booking.id, "confirmed");
+
+      const user = await userModel.findById(booking.user_id);
+      if (user) emailService.sendBookingConfirmation(user.email, booking);
     } else if (status === "EXPIRED") {
       await transactionModel.updateStatus(transaction.id, "expired");
       // Hanya lepas slot jika belum ada pembayaran lain yang berhasil (mis. DP sudah cair)

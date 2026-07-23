@@ -20,9 +20,7 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/fields", require("./routes/field.routes"));
 app.use("/api/schedules", require("./routes/schedule.routes"));
 app.use("/api/bookings", require("./routes/booking.routes"));
-
-// Route modules akan ditambahkan di fase berikutnya:
-// app.use("/api/payments", require("./routes/payment.routes"));
+app.use("/api/payments", require("./routes/payment.routes"));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Endpoint tidak ditemukan" });

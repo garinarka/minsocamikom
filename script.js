@@ -6,12 +6,10 @@ if (qTgl) {
   qTgl.value = t.toISOString().split("T")[0];
 }
 
-// Blok 1: Kalkulator Harga Otomatis
-const hargaTabel = {
-  pagi: { weekday: 80000, weekend: 100000 },
-  sore: { weekday: 100000, weekend: 120000 },
-  malam: { weekday: 120000, weekend: 150000 },
-};
+// Blok 1: Integrasi Booking Engine Real (API backend)
+// CATATAN: FIELD_ID mengacu ke lapangan utama (id=1) yang dibuat admin di backend.
+const FIELD_ID = 1;
+let scheduleMap = {}; // { "08:00": {id, final_price, price_type, is_booked}, ... }
 
 const sesiInput = document.getElementById("sesi");
 const jamInput = document.getElementById("jam");
@@ -27,12 +25,21 @@ function getSesi(jamStr) {
   return null;
 }
 
-function isWeekend(tanggalStr) {
-  const day = new Date(tanggalStr).getDay();
-  return day === 0 || day === 6;
+// Ambil kalender real dari backend untuk tanggal yang dipilih
+async function loadSchedulesForDate(tanggal) {
+  scheduleMap = {};
+  if (!tanggal || typeof apiFetch !== "function") return;
+  try {
+    const { schedules } = await apiFetch(`/schedules?fieldId=${FIELD_ID}&date=${tanggal}`);
+    schedules.forEach((s) => {
+      scheduleMap[s.start_time.slice(0, 5)] = s;
+    });
+  } catch (err) {
+    console.error("[SCHEDULE] Gagal memuat jadwal:", err.message);
+  }
 }
 
-// isi ulang opsi dropdown "Jam Mulai" sesuai sesi yang dipilih
+// isi ulang opsi dropdown "Jam Mulai" sesuai sesi & ketersediaan real dari backend
 function populateJamOptions(sesi) {
   if (!jamInput) return;
 
@@ -48,31 +55,62 @@ function populateJamOptions(sesi) {
   let opsiHtml = `<option value="" disabled selected>Pilih jam mulai</option>`;
   jamList.forEach((h) => {
     const jamStr = `${pad(h)}:00`;
-    opsiHtml += `<option value="${jamStr}">${jamStr}</option>`;
+    const slot = scheduleMap[jamStr];
+    const habis = !slot || slot.is_booked;
+    opsiHtml += `<option value="${jamStr}" ${habis ? "disabled" : ""}>${jamStr}${habis ? " (habis/belum tersedia)" : ""}</option>`;
   });
   jamInput.innerHTML = opsiHtml;
 }
 
+// Total harga dihitung dari final_price REAL (dynamic pricing backend), bukan tabel statis
 function hitungTotal() {
   if (!totalHargaEl) return;
 
   const durasi = parseInt(durasiInput.value) || 0;
-  const sesi = sesiInput && sesiInput.value ? sesiInput.value : null;
-  const weekend = tanggalInput.value ? isWeekend(tanggalInput.value) : false;
+  const jamMulai = jamInput.value;
 
-  if (!sesi || !durasi || !jamInput.value) {
+  if (!durasi || !jamMulai || !scheduleMap[jamMulai]) {
     totalHargaEl.textContent = "Total Harga: Rp0";
+    totalHargaEl.dataset.valid = "false";
     return;
   }
 
-  const hargaPerJam = weekend
-    ? hargaTabel[sesi].weekend
-    : hargaTabel[sesi].weekday;
-  const total = hargaPerJam * durasi;
+  // pastikan slot berurutan sejumlah `durasi` tersedia semua
+  const startHour = parseInt(jamMulai.split(":")[0]);
+  let total = 0;
+  let semuaTersedia = true;
+  const slotTerpakai = [];
 
-  totalHargaEl.textContent = `Total Harga: Rp${total.toLocaleString("id-ID")} (${sesi}, ${weekend ? "weekend" : "weekday"})`;
+  for (let i = 0; i < durasi; i++) {
+    const jamStr = `${pad(startHour + i)}:00`;
+    const slot = scheduleMap[jamStr];
+    if (!slot || slot.is_booked) {
+      semuaTersedia = false;
+      break;
+    }
+    total += Number(slot.final_price);
+    slotTerpakai.push(slot);
+  }
+
+  if (!semuaTersedia) {
+    totalHargaEl.textContent = "Slot tidak tersedia berurutan untuk durasi ini, pilih durasi/jam lain";
+    totalHargaEl.dataset.valid = "false";
+    return;
+  }
+
+  totalHargaEl.textContent = `Total Harga: Rp${total.toLocaleString("id-ID")} (${durasi} jam, ${slotTerpakai[0].price_type})`;
+  totalHargaEl.dataset.valid = "true";
+  totalHargaEl.dataset.slotIds = JSON.stringify(slotTerpakai.map((s) => s.id));
+  totalHargaEl.dataset.total = total;
 }
 
+if (tanggalInput) {
+  tanggalInput.addEventListener("change", async () => {
+    await loadSchedulesForDate(tanggalInput.value);
+    populateJamOptions(sesiInput ? sesiInput.value : "");
+    hitungTotal();
+  });
+}
 if (sesiInput) {
   populateJamOptions("");
   sesiInput.addEventListener("change", () => {
@@ -82,7 +120,6 @@ if (sesiInput) {
 }
 if (durasiInput) durasiInput.addEventListener("change", hitungTotal);
 if (jamInput) jamInput.addEventListener("change", hitungTotal);
-if (tanggalInput) tanggalInput.addEventListener("change", hitungTotal);
 
 // Validasi tanggal & jam
 if (tanggalInput) {
@@ -114,9 +151,10 @@ if (btnRingkasan) {
       tglVal && tglVal < tanggalInput.min ? "Tanggal tidak boleh lampau" : "",
     );
 
-    if (!bookingForm.checkValidity()) {
+    if (!bookingForm.checkValidity() || totalHargaEl.dataset.valid !== "true") {
       bookingForm.classList.add("was-validated");
       bookingForm.reportValidity();
+      if (totalHargaEl.dataset.valid !== "true") alert("Slot belum tersedia/valid, cek kembali jam & durasi.");
       return;
     }
 
@@ -134,20 +172,46 @@ if (btnRingkasan) {
 }
 
 if (btnKonfirmasi) {
-  btnKonfirmasi.addEventListener("click", () => {
-    bootstrap.Modal.getInstance(
-      document.getElementById("modalRingkasan"),
-    ).hide();
+  btnKonfirmasi.addEventListener("click", async () => {
+    const user = requireAuth(["customer"]);
+    if (!user) return;
 
-    const modalElement = document.getElementById("confirmModal");
-    if (modalElement) {
-      new bootstrap.Modal(modalElement).show();
+    const slotIds = JSON.parse(totalHargaEl.dataset.slotIds || "[]");
+    if (!slotIds.length) return;
+
+    btnKonfirmasi.disabled = true;
+    btnKonfirmasi.textContent = "Memproses...";
+
+    try {
+      // Booking dibuat per slot 1 jam (sesuai desain anti double-booking backend).
+      // Untuk durasi >1 jam, setiap slot mendapat invoice QRIS terpisah.
+      const invoiceUrls = [];
+      for (const scheduleId of slotIds) {
+        const { booking } = await apiFetch("/bookings", {
+          method: "POST",
+          body: JSON.stringify({ scheduleId, isNonRefundable: false }),
+        });
+        const { invoiceUrl } = await apiFetch("/payments/invoice", {
+          method: "POST",
+          body: JSON.stringify({ bookingId: booking.id, paymentType: "full" }),
+        });
+        invoiceUrls.push(invoiceUrl);
+      }
+
+      bootstrap.Modal.getInstance(document.getElementById("modalRingkasan"))?.hide();
+
+      if (invoiceUrls.length === 1) {
+        window.location.href = invoiceUrls[0];
+      } else {
+        alert(`${invoiceUrls.length} invoice pembayaran dibuat. Anda akan diarahkan ke invoice pertama, lanjutkan sisanya dari email/riwayat booking.`);
+        window.location.href = invoiceUrls[0];
+      }
+    } catch (err) {
+      alert("Gagal membuat booking: " + err.message);
+    } finally {
+      btnKonfirmasi.disabled = false;
+      btnKonfirmasi.textContent = "Konfirmasi Booking";
     }
-
-    bookingForm.reset();
-    bookingForm.classList.remove("was-validated");
-    totalHargaEl.textContent = "Total Harga: Rp0";
-    populateJamOptions("");
   });
 }
 
@@ -241,35 +305,37 @@ function formatTanggalLabel(d) {
 }
 
 function renderJadwalTerisi() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const listEl = document.getElementById("listBooking");
-      const labelEl = document.getElementById("labelTanggalJadwal");
-      if (!listEl) return resolve();
+  return (async () => {
+    const listEl = document.getElementById("listBooking");
+    const labelEl = document.getElementById("labelTanggalJadwal");
+    if (!listEl) return;
 
-      const key = toDateStr(tanggalAktifJadwal);
-      if (labelEl) labelEl.textContent = formatTanggalLabel(tanggalAktifJadwal);
+    const key = toDateStr(tanggalAktifJadwal);
+    if (labelEl) labelEl.textContent = formatTanggalLabel(tanggalAktifJadwal);
 
-      const data = bookingData[key] || [];
-      listEl.innerHTML = "";
+    listEl.innerHTML = `<li class="list-group-item text-center text-muted">Memuat...</li>`;
 
-      if (data.length === 0) {
-        listEl.innerHTML = `<li class="list-group-item text-center text-muted"><i class="bi bi-calendar-x"></i> Belum ada jadwal terisi</li>`;
-        return resolve();
-      }
+    let data = [];
+    try {
+      const res = await apiFetch(`/schedules?fieldId=${FIELD_ID}&date=${key}`);
+      data = (res.schedules || []).filter((s) => s.is_booked);
+    } catch (err) {
+      console.error("[JADWAL] Gagal memuat:", err.message);
+    }
 
-      data.forEach((item) => {
-        const startH = parseInt(item.jam.split(":")[0]);
-        const endH = startH + item.durasi;
-        const li = document.createElement("li");
-        li.className = "list-group-item";
-        li.innerHTML = `<i class="bi bi-clock-history me-1"></i> ${pad(startH)}:00 - ${pad(endH)}:00 - ${item.nama} <span class="badge bg-danger float-end">Terisi</span>`;
-        listEl.appendChild(li);
-      });
+    listEl.innerHTML = "";
+    if (data.length === 0) {
+      listEl.innerHTML = `<li class="list-group-item text-center text-muted"><i class="bi bi-calendar-x"></i> Belum ada jadwal terisi</li>`;
+      return;
+    }
 
-      resolve();
-    }, 250);
-  });
+    data.forEach((slot) => {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.innerHTML = `<i class="bi bi-clock-history me-1"></i> ${slot.start_time.slice(0, 5)} - ${slot.end_time.slice(0, 5)} <span class="badge bg-danger float-end">Terisi</span>`;
+      listEl.appendChild(li);
+    });
+  })();
 }
 
 const btnJadwalPrev = document.getElementById("jadwalPrev");

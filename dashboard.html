@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Amikom Soccer Arena</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-amikom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Amikom Soccer Arena</a>
+            <div class="ms-auto">
+                <span class="text-white me-3" id="welcomeText"></span>
+                <button class="btn btn-sm btn-outline-light" id="btnLogout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section-white section-padding" style="padding-top:120px;">
+        <div class="container">
+            <h2 class="section-title mb-4">Dashboard Analitik</h2>
+
+            <div class="row g-3 mb-4" id="summaryCards"></div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="feature-card-white p-3">
+                        <h5>Okupansi Lapangan</h5>
+                        <table class="table table-sm">
+                            <thead><tr><th>Lapangan</th><th>Total Slot</th><th>Terisi</th><th>%</th></tr></thead>
+                            <tbody id="occupancyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="feature-card-white p-3">
+                        <h5>Jam Paling Ramai</h5>
+                        <table class="table table-sm">
+                            <thead><tr><th>Jam</th><th>Tipe Harga</th><th>Total Booking</th></tr></thead>
+                            <tbody id="busiestBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="feature-card-white p-3">
+                        <h5>Rekap Arus Kas</h5>
+                        <table class="table table-sm">
+                            <thead><tr><th>Periode</th><th>Total Pendapatan</th><th>Total Transaksi</th></tr></thead>
+                            <tbody id="cashFlowBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="assets/js/api.js"></script>
+    <script>
+        const user = requireAuth(["owner", "admin"]);
+        if (user) document.getElementById("welcomeText").textContent = `Halo, ${user.name} (${user.role})`;
+
+        document.getElementById("btnLogout").addEventListener("click", () => {
+            Auth.clearSession();
+            window.location.href = "login.html";
+        });
+
+        function formatRupiah(n) {
+            return "Rp" + Number(n).toLocaleString("id-ID");
+        }
+
+        async function loadDashboard() {
+            try {
+                const [summary, occupancy, busiest, cashFlow] = await Promise.all([
+                    apiFetch("/dashboard/summary"),
+                    apiFetch("/dashboard/occupancy"),
+                    apiFetch("/dashboard/busiest-slots"),
+                    apiFetch("/dashboard/cash-flow?groupBy=day"),
+                ]);
+
+                document.getElementById("summaryCards").innerHTML = `
+                    <div class="col-md-3"><div class="feature-card-white p-3 text-center">
+                        <small class="text-muted">Booking Sukses</small><h4>${summary.summary.booking_sukses}</h4></div></div>
+                    <div class="col-md-3"><div class="feature-card-white p-3 text-center">
+                        <small class="text-muted">Dibatalkan</small><h4>${summary.summary.booking_dibatalkan}</h4></div></div>
+                    <div class="col-md-3"><div class="feature-card-white p-3 text-center">
+                        <small class="text-muted">Expired</small><h4>${summary.summary.booking_expired}</h4></div></div>
+                    <div class="col-md-3"><div class="feature-card-white p-3 text-center">
+                        <small class="text-muted">Total Diterima</small><h4>${formatRupiah(summary.summary.total_diterima)}</h4></div></div>
+                `;
+
+                document.getElementById("occupancyBody").innerHTML = occupancy.occupancy
+                    .map((o) => `<tr><td>${o.field_name}</td><td>${o.total_slot}</td><td>${o.booked_slot}</td><td>${o.occupancy_percent ?? 0}%</td></tr>`)
+                    .join("") || "<tr><td colspan='4' class='text-muted'>Belum ada data</td></tr>";
+
+                document.getElementById("busiestBody").innerHTML = busiest.busiestSlots
+                    .map((b) => `<tr><td>${b.start_time}</td><td>${b.price_type}</td><td>${b.total_booking}</td></tr>`)
+                    .join("") || "<tr><td colspan='3' class='text-muted'>Belum ada data</td></tr>";
+
+                document.getElementById("cashFlowBody").innerHTML = cashFlow.cashFlow
+                    .map((c) => `<tr><td>${new Date(c.period).toLocaleDateString("id-ID")}</td><td>${formatRupiah(c.total_revenue)}</td><td>${c.total_transaksi}</td></tr>`)
+                    .join("") || "<tr><td colspan='3' class='text-muted'>Belum ada data</td></tr>";
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        if (user) loadDashboard();
+    </script>
+</body>
+
+</html>
